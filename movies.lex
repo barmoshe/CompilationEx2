@@ -19,8 +19,8 @@ int line = 1;
 "DC" {return PUBLISHER;}
 "Marvel" {return PUBLISHER;}
 "#" {return NEXT_LINE;}
-"/" {return "/";}
-":" {return ":";}
+"/" {return SLASH;}
+":" {return COLON;}
 [0-9]+     { return YEAR; }
 \[[A-Za-z]+(" "[A-Za-z]+)*\]   { return NAME; }
      
