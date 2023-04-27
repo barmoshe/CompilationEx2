@@ -6,6 +6,7 @@ OBJECTS = lex.yy.o movies.tab.o
 # Use 'movies.exe'  on Windows
 movies: $(OBJECTS)
 	$(CC) $(OBJECTS)  -o movies
+	./movies movies.txt
 
 
 lex.yy.c: movies.lex
