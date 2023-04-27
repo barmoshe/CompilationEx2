@@ -1,100 +1,92 @@
-%code {
-
-/* 
-This  program reads a list  of songs  from its input.
-It prints the length (in minutes and seconds) of the shortest song
-   that satisfies the following conditions:
-     (1)  Its length is at least 4:02  (4 minutes and 2 seconds)
-     (2)  The artist is known by one name only (for example
-          movies  but not Joe Cocker)
-          
-For an example of an input, see file movies.txt 
-
-To prepare the program, issue the following commands from
-  The command line:
-  
-  flex movies.lex    (This will generate a file called lex.yy.c)
-  bison -d movies.y  (This will generate files movies.tab.c & movies.tab.h)
-  
-  compile  the files  that flex and bison generated with a C compiler
-  for example: 
-       gcc lex.yy.c movies.tab.c -o movies.exe
-       
-  The input file for the program should be supplied as a command line argument
-  for example:
-      movies.exe  movies.txt
-
-*/
-
+%{
 #include <stdio.h>
+#include <string.h>
+int dc_counter = 0;
+int marvel_counter = 0;
+int dc_counter_movies = 0;
+int marvel_counter_movies = 0;
 
-  /* yylex () and yyerror() need to be declared here */
 extern int yylex (void);
 void yyerror (const char *s);
 
-struct time
-min_time (struct time t1, struct time t2);
-}
 
-%code requires {
-    struct time {
-         int minutes;  /* -1  means irrelevant */ 
-         int seconds; 
-    };
-}
+%}
 
-/* note: no semicolon after the union */
 %union {
-   int number_of_names;
-   struct time _time;
+  char *str_val;
+  int in_movie;
 }
 
-%token PLAYLIST  SEQ_NUM SONG ARTIST LENGTH SONG_NAME
-%token NAME 
+%token TITLE
+%token NAME
+%token PUBLISHER
+%token YEAR
+%token TV
+%token MOVIES
+%token ZILCH
+%token COLON
+%token MEDIA
+%token SLASH
 
-%token <_time> SONG_LENGTH 
+%type<str_val> PUBLISHER
+%type<in_movie> media_info
+%type<in_movie> media_spec
 
-%nterm <_time> songlist song
-%nterm <number_of_names> artist_name
-
-%define parse.error verbose
-
-/*%error-verbose*/
 
 %%
 
-start: PLAYLIST songlist 
-       { if ($2.minutes == -1) 
-             printf ("no relevant song\n");
-         else
-             printf ("time for shortest relevant song: %d:%.2d\n",
-                            $2.minutes, $2.seconds);
-       };
-       
-songlist: %empty        { $$.minutes = -1;
-                          $$.seconds = -1;
-                        };
-                        
-songlist: songlist song { $$ = min_time($1, $2); };
-/*     $1       $2     $3       $4      $5         $6       $7  */        
-song: SEQ_NUM  SONG SONG_NAME  ARTIST artist_name LENGTH SONG_LENGTH
-       {  if ($5 == 1 && ($7.minutes > 4 || $7.minutes == 4 &&
-                                            $7.seconds >= 2))									
-              $$ = $7;
-          else {
-              $$.minutes = -1;
-              $$.seconds = -1;
+input: TITLE hero_list TITLE {
+  /*printf("DC: %d\n", dc_counter);
+  printf("Marvel: %d\n", marvel_counter);
+  printf("DC Movies: %d\n", dc_counter_movies);
+  printf("Marvel Movies: %d\n", marvel_counter_movies);*/
+  if (marvel_counter - marvel_counter_movies > dc_counter - dc_counter_movies) {
+    printf("More Marvel super heroes did not appear in movies\n");
+  } else if (marvel_counter - marvel_counter_movies < dc_counter - dc_counter_movies) {
+    printf("More DC super heroes did not appear in movies\n");
+  }
+}
+
+hero_list: hero_list super_hero {}
+         | /* epsilon */ {
+            dc_counter_movies = 0;
+            marvel_counter_movies = 0;
+            marvel_counter = 0;
+            dc_counter = 0;
+
+            }
+         
+
+super_hero: NAME PUBLISHER YEAR media_info {
+            char *pub = $2;
+            if (strcmp(pub, "DC") == 0) {
+              dc_counter += 1;
+              dc_counter_movies += $4;
+            } else if (strcmp(pub, "Marvel") == 0) {
+              marvel_counter += 1;
+              marvel_counter_movies += $4;
+            }
+}
+           
+
+media_info: MEDIA COLON media_spec {
+            $$ = $3;
+}
+          | /*epsilon */ {
+            $$ = 0;
           }
-       };
+          
 
-artist_name: NAME { $$ = 1; }
-           | NAME NAME { $$ = 2; }
-           ;           
+media_spec: /*epsilon */ {$$ = 0;}
+          | TV {$$ = 0;}
+          | MOVIES {$$ = 1;}
+          | MOVIES SLASH TV {$$ = 1;}
+          | TV SLASH MOVIES {$$ = 1;}
+          | ZILCH {$$ = 0;}
+          
 
 %%
-
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
   extern FILE *yyin;
   if (argc != 2) {
@@ -118,21 +110,3 @@ void yyerror (const char *s)
   extern int line;
   fprintf (stderr, "line %d: %s\n", line, s);
 }
-
-struct time
-min_time (struct time t1, struct time t2)
-{
-     if (t1.minutes == -1)
-         return t2;
-     else if (t2.minutes == -1)
-         return t1;
-         
-     if (t1.minutes < t2.minutes || (t1.minutes == t2.minutes &&
-                                     t1.seconds < t2.seconds))
-          return t1;
-     return t2;
-}
-
-
-
-

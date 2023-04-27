@@ -1,14 +1,10 @@
-[playlist]
+** super heroes **
+[superman] DC 1938 media: TV/MOVIES # superman is the best
+[Batman]   DC 1939 media : MOVIES/TV
+[The Flash]DC 1940 media: TV
+[Spider Man] Marvel 1962 media: MOVIES
+[Iron Man]   Marvel 1963 media: zilch
 
-1 [song] "Material Girl" [artist] Madonna [length] 4:10
-  
-2 [song] "If You Love Somebody Set Them Free" [artist] Sting [length] 4:15
+[Wonder Woman] DC   1941 
 
-3 [song] "Mustang Sally" [artist] Joe Cocker [length] 4:08
-
-4 [song] "Open Your Heart" [artist] Madonna [length] 4:13
-
-5 [song] "Another One Bites The Dust" [artist] Queen [length] 3:43
-
-6 [song] "Just Dance" [artist] Lady Gaga [length] 7:21
- 
+** super heroes **

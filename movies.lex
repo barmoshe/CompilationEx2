@@ -14,11 +14,11 @@ int line = 1;
 "** super heroes **"  { return TITLE; }
 "media" {return MEDIA;}
 "TV" {return TV;}
-"zlich" {return ZILCH;}
-"MOVIES" {return MOVIES;}
-"DC" {return PUBLISHER;}
-"Marvel" {return PUBLISHER;}
-"#" {return NEXT_LINE;}
+"zilch" {return ZILCH;}
+"MOVIES" { return MOVIES;}
+"DC" {yylval.str_val = strdup(yytext); return PUBLISHER;}
+"Marvel" {yylval.str_val = strdup(yytext);return PUBLISHER;}
+\#(.*) {}
 "/" {return SLASH;}
 ":" {return COLON;}
 [0-9]+     { return YEAR; }
@@ -26,8 +26,8 @@ int line = 1;
      
 [\t\r ]+   /* skip white space */
 \n         { line++; }
-.          { fprintf (stderr, "line %d: unrecognized token %c\n",
-                               line, yytext[0]);  
+.          { fprintf (stderr, "line %d: unrecognized token %s\n",
+                               line, yytext);  
              exit(1);
            }
 
