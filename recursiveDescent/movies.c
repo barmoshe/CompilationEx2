@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h> /* for exit() */
 #include <string.h>
-
 #include "movies.h"
 
 extern enum token yylex(void);
 enum token lookahead;
+
 
 // the recursive descent parser
 void input();
@@ -73,25 +73,25 @@ void input()
     match(TITLE);
     struct counter publisher = hero_list();
     match(TITLE);
-    printf("DC: %d\n", publisher.dc_count);
-    printf("Marvel: %d\n", publisher.marvel_count);
-    if (publisher.dc_count > publisher.marvel_count)
+    printf("DC: %d\n", publisher.dc_count_no_movie);
+    printf("Marvel: %d\n", publisher.marvel_count_no_movie);
+    if (publisher.dc_count_no_movie > publisher.marvel_count_no_movie)
         printf("More DC super heroes did not appear in movies\n");
-    else if (publisher.dc_count < publisher.marvel_count)
+    else if (publisher.dc_count_no_movie < publisher.marvel_count_no_movie)
         printf("More Marvel super heroes did not appear in movies\n");
 }
 
 struct counter hero_list()
 { // grammer rule
     // init counter
-    struct counter publisher = {0, 0};
+    struct counter publisher_total = {0, 0};
     while (lookahead == NAME)
     {
         struct counter publisher2 = super_hero();
-        publisher.dc_count += publisher2.dc_count;
-        publisher.marvel_count += publisher2.marvel_count;
+        publisher_total.dc_count_no_movie += publisher2.dc_count_no_movie;
+        publisher_total.marvel_count_no_movie += publisher2.marvel_count_no_movie;
     }
-    return publisher;
+    return publisher_total;
 }
 
 struct counter super_hero()
@@ -101,21 +101,15 @@ struct counter super_hero()
     if (lookahead == PUBLISHER)
     {
         match(PUBLISHER);
-        if (strcmp(lexicalValue.str_val, "DC") == 0)
-        {
-            publisher.dc_count++;
-        }
-        else if (strcmp(lexicalValue.str_val, "Marvel") == 0)
-        {
-            publisher.marvel_count++;
-        }
-        else
-        {
-            errorMsg("error: publisher not found");
-            exit(1);
-        }
+        int is_DC= lexicalValue.is_DC;
         match(YEAR);
-        media_info();
+        int in_movie=media_info();
+        if (is_DC && !in_movie)
+            publisher.dc_count_no_movie++;
+        else if (!is_DC && !in_movie)
+            publisher.marvel_count_no_movie++;
+
+        
     }
     else
     {

@@ -17,17 +17,15 @@ enum token
 
 char *token_name(enum token token);
 
-
 struct counter
 {
-   int dc_count;
-   int marvel_count;
+   int dc_count_no_movie;
+   int marvel_count_no_movie;
 };
 // We don't really need a union here because only there is only one field.
 union _lexVal
 {
-   char *str_val;
-   int in_movie;
+   int is_DC;
 };
 
 extern union _lexVal lexicalValue; // like yylval when we use bison

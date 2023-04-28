@@ -1,6 +1,6 @@
 %{
-
-
+#include "movies.h"
+union _lexVal lexicalValue;
 extern int atoi (const char *);
 extern void exit(int);
 
@@ -16,8 +16,8 @@ int line = 1;
 "TV" {return TV;}
 "zilch" {return ZILCH;}
 "MOVIES" { return MOVIES;}
-"DC" {yylval.str_val = strdup(yytext); return PUBLISHER;}
-"Marvel" {yylval.str_val = strdup(yytext);return PUBLISHER;}
+"DC" {lexicalValue.is_DC = 1; return PUBLISHER;}
+"Marvel" {lexicalValue.is_DC = 0;return PUBLISHER;}
 \#(.*) {}
 "/" {return SLASH;}
 ":" {return COLON;}
@@ -48,5 +48,5 @@ char *token_name(enum token token)
        "YEAR",
        "NAME"};
 
-   return token <= MEDIA ? names[token] : "unknown token";
+   return token <= NAME ? names[token] : "unknown token";
 }

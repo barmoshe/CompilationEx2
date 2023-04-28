@@ -67,21 +67,21 @@ void start()
 {
 	match(TITLE);
 	struct counter sl = superhero_list();
-	if (sl.dc_count > sl.marvel_count) 
+	if (sl.dc_count_no_movie > sl.marvel_count_no_movie) 
 		printf ("More DC super heroes did not appear in movies\n");
-	else if (sl.dc_count < sl.marvel_count)
+	else if (sl.dc_count_no_movie < sl.marvel_count_no_movie)
 		printf ("More Marvel super heroes did not appear in movies\n");
 	match(TITLE);
 }
 
 struct counter superhero_list()
 {
-	struct counter total = { .dc_count = 0, .marvel_count = 0 };
+	struct counter total = { .dc_count_no_movie = 0, .marvel_count_no_movie = 0 };
 	while(lookahead == NAME) 
 	{
 		struct counter s = superhero();
-		total.dc_count += s.dc_count;
-		total.marvel_count += s.marvel_count;
+		total.dc_count_no_movie += s.dc_count_no_movie;
+		total.marvel_count_no_movie += s.marvel_count_no_movie;
 	}
 	return total;
 }
@@ -103,19 +103,19 @@ struct counter superhero()
     			if(lookahead == MOVIES)
     			{
     				match(MOVIES);
-    				struct counter s = { .dc_count = 0, .marvel_count = 0 };
+    				struct counter s = { .dc_count_no_movie = 0, .marvel_count_no_movie = 0 };
     				return s;
     			}
     			else
     			{
     				if(is_marvel)
     				{
-    					struct counter s = { .dc_count = 0, .marvel_count = 1 };
+    					struct counter s = { .dc_count_no_movie = 0, .marvel_count_no_movie = 1 };
     					return s;
     				}
     				else
     				{
-    					struct counter s = { .dc_count = 1, .marvel_count = 0 };
+    					struct counter s = { .dc_count_no_movie = 1, .marvel_count_no_movie = 0 };
     					return s;
     				}
     			}
@@ -125,7 +125,7 @@ struct counter superhero()
     			match(MOVIES);
     			if(lookahead == TV)
     				match(TV);
-    			struct counter s = { .dc_count = 0, .marvel_count = 0 };
+    			struct counter s = { .dc_count_no_movie = 0, .marvel_count_no_movie = 0 };
     			return s;
     		}
     		else
@@ -134,12 +134,12 @@ struct counter superhero()
     				match(ZILCH);
     			if(is_marvel)
     			{
-    				struct counter s = { .dc_count = 0, .marvel_count = 1 };
+    				struct counter s = { .dc_count_no_movie = 0, .marvel_count_no_movie = 1 };
     				return s;
     			}
     			else
     			{
-    				struct counter s = { .dc_count = 1, .marvel_count = 0 };
+    				struct counter s = { .dc_count_no_movie = 1, .marvel_count_no_movie = 0 };
     				return s;
     			}
     		}
@@ -148,12 +148,12 @@ struct counter superhero()
     {
     	if(is_marvel)
     	{
-    		struct counter s = { .dc_count = 0, .marvel_count = 1 };
+    		struct counter s = { .dc_count_no_movie = 0, .marvel_count_no_movie = 1 };
     		return s;
     	}
     	else
     	{
-    		struct counter s = { .dc_count = 1, .marvel_count = 0 };
+    		struct counter s = { .dc_count_no_movie = 1, .marvel_count_no_movie = 0 };
     		return s;
     	}
     }
