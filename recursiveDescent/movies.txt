@@ -1,0 +1,10 @@
+** super heroes **
+[superman] DC 1938 media: TV/MOVIES # superman is the best
+[Batman]   DC 1939 media : MOVIES/TV
+[The Flash]DC 1940 media: TV
+[Spider Man] Marvel 1962 media: MOVIES
+[Iron Man]   Marvel 1963 media: zilch
+
+[Wonder Woman] DC   1941 
+
+** super heroes **
