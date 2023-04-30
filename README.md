@@ -1,4 +1,7 @@
 # CompilationEx2
+
+#Bar Moshe and Amir Peleg
+#206921777_205818032
 Compi_ex2
 
 This directory contains two implementations of a compiler for a movie database language:
